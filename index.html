@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Gift for Mrs. Puff</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { font-family: 'Quicksand', sans-serif; }
+    @keyframes fall {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(105vh) rotate(360deg); opacity: 0.2; }
+    }
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      color: #ffffff;
+      user-select: none;
+      pointer-events: none;
+      animation: fall linear infinite;
+    }
+    @keyframes floatEmoji {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-8px) scale(1.08); }
+    }
+    .animate-float { animation: floatEmoji 2.5s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-blue-200 via-sky-100 to-white min-h-screen flex items-center justify-center p-4 relative overflow-x-hidden">
+  <div id="root" class="w-full flex justify-center"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const photoPages = [
+      { pageIndex: 7, label: "thn kapan ini wkwkwk", caption: "First Graduation", image: "https://i.postimg.cc/Hn5yKTcz/20220312-101531.jpg", isVideo: false, btnText: "Lanjut ke Foto Berikutnya ✨" },
+      { pageIndex: 8, label: "hmmm", caption: "sebenarnya mau main", image: "https://i.postimg.cc/kMFMjVDp/20220312-101516.jpg", isVideo: false, btnText: "Buka Kenangan Lainnya 📸" },
+      { pageIndex: 9, label: "wink", caption: "pengalaman magang kerja pertama😂😭", image: "https://i.postimg.cc/2S3z82G7/20191109-150829.jpg", isVideo: false, btnText: "Next Moment 🚀" },
+      { pageIndex: 10, label: "Sleep Time", caption: "Angkat tangan mu Shaggy🤣", image: "https://i.postimg.cc/1zqsDXLY/received-539886999738058.jpg", isVideo: false, btnText: "Lihat Lagi Yuk ➡️" },
+      { pageIndex: 11, label: "Java", caption: "First ride in Java ✈️", image: "https://i.postimg.cc/BvxRqKrh/20251002-113715.jpg", isVideo: false, btnText: "Hampir Selesai 🎁" },
+      { pageIndex: 12, label: "Bonus", caption: "Tiktok time~", image: "https://litter.catbox.moe/1obke3113bhti2kl.mp4", isVideo: true, btnText: "Lanjut ke Playlist 🎵" }
+    ];
+
+    function App() {
+      const [page, setPage] = useState(1);
+      const [passwordInput, setPasswordInput] = useState("");
+      const [errorMessage, setErrorMessage] = useState("");
+      const TARGET_PASSWORD = "271026";
+      const totalPages = 15;
+
+      const handleReset = () => { setPage(1); setPasswordInput(""); setErrorMessage(""); };
+      const handleKeyPress = (num) => {
+        if (passwordInput.length < 6) {
+          const updated = passwordInput + num;
+          setPasswordInput(updated);
+          if (updated.length === 6) {
+            if (updated === TARGET_PASSWORD) { setErrorMessage(""); setPage(2); }
+            else { setErrorMessage("OMG...!! You don't know this??"); }
+          }
+        }
+      };
+      const handleDelete = () => { setPasswordInput(prev => prev.slice(0, -1)); setErrorMessage(""); };
+      const isSnowPage = page >= 7 && page <= 12;
+
+      return (
+        <div class="relative w-full max-w-md my-auto">
+          {isSnowPage && (
+            <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+              {[...Array(20)].map((_, i) => (
+                <div key={i} class="snowflake" style={{ left: `${Math.random() * 100}%`, animationDuration: `${3 + Math.random() * 5}s`, animationDelay: `${Math.random() * 3}s`, fontSize: `${12 + Math.random() * 16}px` }}>{i % 2 === 0 ? "✨" : "❄️"}</div>
+              ))}
+            </div>
+          )}
+          <div class="bg-white rounded-3xl shadow-xl border border-blue-100 p-6 relative z-10 transition-all duration-300">
+            <div class="w-full bg-blue-100 rounded-full h-2 mb-6 overflow-hidden">
+              <div class="bg-blue-500 h-2 rounded-full transition-all duration-500 ease-out" style={{ width: `${(page / totalPages) * 100}%` }}></div>
+            </div>
+
+            {page === 1 && (
+              <div class="text-center flex flex-col items-center">
+                <div class="text-6xl mb-4 animate-float">🔒</div>
+                <h2 class="text-xl font-bold text-blue-900 mb-2">Hi, Mrs.Puff! Ayo tebak passwordnya. I bet you know!!</h2>
+                <p class="text-sm font-semibold text-blue-500 mb-4 bg-blue-50 px-3 py-1 rounded-full">💡 Clue: Birth today</p>
+                <div class="flex gap-2 justify-center mb-3">
+                  {[...Array(6)].map((_, idx) => (
+                    <div key={idx} class={`w-10 h-12 rounded-xl border-2 flex items-center justify-center font-bold text-xl transition-all ${passwordInput[idx] ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-blue-200 text-transparent'}`}>{passwordInput[idx] ? "•" : ""}</div>
+                  ))}
+                </div>
+                {errorMessage && <p class="text-red-500 font-bold text-sm mb-4 animate-bounce">{errorMessage}</p>}
+                <div class="grid grid-cols-3 gap-3 w-full max-w-xs mt-2">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+                    <button key={n} onClick={() => handleKeyPress(n.toString())} class="bg-blue-50 hover:bg-blue-100 active:scale-95 text-blue-800 font-bold py-3 rounded-2xl shadow-sm transition text-lg">{n}</button>
+                  ))}
+                  <button onClick={() => handleKeyPress("0")} class="col-span-2 bg-blue-50 hover:bg-blue-100 active:scale-95 text-blue-800 font-bold py-3 rounded-2xl shadow-sm transition text-lg">0</button>
+                  <button onClick={handleDelete} class="bg-red-50 hover:bg-red-100 active:scale-95 text-red-600 font-bold py-3 rounded-2xl shadow-sm transition text-sm flex items-center justify-center">⌫</button>
+                </div>
+              </div>
+            )}
+
+            {page === 2 && (
+              <div class="text-center flex flex-col items-center py-4">
+                <div class="text-6xl mb-4 animate-float">🎉</div>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Good.. So easy.</h2>
+                <button onClick={() => setPage(3)} class="w-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold py-3 rounded-2xl shadow-md transition">Ayo lanjut! 🚀</button>
+              </div>
+            )}
+
+            {page === 3 && (
+              <div class="text-center flex flex-col items-center py-4">
+                <div class="text-6xl mb-4 animate-float">🧐</div>
+                <h2 class="text-xl font-bold text-blue-900 mb-6">are you readyyy to open thiiissss???</h2>
+                <div class="flex flex-col gap-3 w-full">
+                  <button onClick={() => setPage(4)} class="w-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold py-3 rounded-2xl shadow-md transition">Siap! 🔥</button>
+                  <button onClick={() => setPage(99)} class="w-full bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-600 font-bold py-3 rounded-2xl transition">Nggak dulu 😜</button>
+                </div>
+              </div>
+            )}
+
+            {page === 99 && (
+              <div class="text-center flex flex-col items-center py-4">
+                <div class="text-6xl mb-4 animate-float">⚠️🚫</div>
+                <h2 class="text-xl font-bold text-red-600 mb-6">This page is NOT AVAILABLE</h2>
+                <button onClick={() => setPage(3)} class="w-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold py-3 rounded-2xl shadow-md transition">Back to Home 🏠</button>
+              </div>
+            )}
+
+            {page === 4 && (
+              <div class="text-center flex flex-col items-center py-4">
+                <div class="text-6xl mb-4 animate-float">👵</div>
+                <h2 class="text-2xl font-bold text-blue-900 mb-6">makin tua woyyy 😂</h2>
+                <button onClick={() => setPage(5)} class="w-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold py-3 rounded-2xl shadow-md transition">Lanjut ke Halaman 5 ➡️</button>
+              </div>
+            )}
+
+            {page === 5 && (
+              <div class="text-center flex flex-col items-center py-4">
+                <div class="text-6xl mb-4 animate-float">🎂</div>
+                <h2 class="text-xl font-bold text-blue-900 mb-6">Selamat ulang tahun yang ke 24thn... ✨</h2>
+                <button onClick={() => setPage(6)} class="w-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold py-3 rounded-2xl shadow-md transition">Lanjut ke Halaman 6 ➡️</button>
+              </div>
+            )}
+
+            {page === 6 && (
+              <div class="text-center flex flex-col items-center py-4">
+                <div class="text-6xl mb-4 animate-float">🎁</div>
+                <h2 class="text-xl font-bold text-blue-900 mb-6">okaaayyy, last one... 🚀</h2>
+                <button onClick={() => setPage(7)} class="w-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold py-3 rounded-2xl shadow-md transition">Lihat Galeri Foto 📸</button>
+              </div>
+            )}
+
+            {page >= 7 && page <= 12 && (() => {
+              const item = photoPages.find(p => p.pageIndex === page);
+              return (
+                <div class="text-center flex flex-col items-center">
+                  <div class="text-4xl mb-2 animate-float">📸</div>
+                  <div class="relative bg-white p-3 rounded-2xl shadow-xl border-4 border-slate-100 mb-4 w-full">
+                    <span class="absolute top-4 right-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md z-10">{item.label}</span>
+                    {item.isVideo ? (
+                      <div class="w-full h-72 rounded-xl overflow-hidden flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 to-blue-950 text-white p-6 shadow-inner">
+                        <div class="text-5xl mb-3 animate-float">🎵</div>
+                        <p class="text-sm font-semibold mb-4 text-center">Spesial Video Buat Kamu!</p>
+                        <video src={item.image} controls class="w-full h-52 object-cover rounded-xl mt-2 shadow-md" />
+                      </div>
+                    ) : (
+                      <img src={item.image} alt="Gallery" class="w-full h-72 object-cover rounded-xl" />
+                    )}
+                  </div>
+                  <p class="text-sm text-slate-600 font-semibold mb-6 px-2">"{item.caption}"</p>
+                  <button onClick={() => setPage(page + 1)} class="w-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold py-3 rounded-2xl shadow-md transition">{item.btnText}</button>
+                </div>
+              );
+            })()}
+
+            {page === 13 && (
+              <div class="text-center flex flex-col items-center py-4">
+                <div class="text-6xl mb-4 animate-float">🎵</div>
+                <h2 class="text-2xl font-bold text-blue-900 mb-6">Play the Song 🎧</h2>
+                <button onClick={() => setPage(14)} class="w-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold py-3 rounded-2xl shadow-md transition">Buka Playlist 🎶</button>
+              </div>
+            )}
+
+            {page === 14 && (
+              <div class="text-center flex flex-col items-center">
+                <div class="text-5xl mb-3 animate-float">🎶</div>
+                <h2 class="text-lg font-bold text-blue-900 mb-1">Special Song for You 💖</h2>
+                <p class="text-xs text-slate-500 mb-4">Tekan tombol Play di bawah untuk memutar lagu!</p>
+                <div class="w-full rounded-2xl overflow-hidden shadow-md mb-6 bg-slate-900">
+                  <iframe style={{ borderRadius: "12px" }} src="https://open.spotify.com/embed/track/5hff5RQeE84pznOt8WEWeO?utm_source=generator&autoplay=1" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+                <button onClick={() => setPage(15)} class="w-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold py-3 rounded-2xl shadow-md transition">Baca Surat Spesial ✉️</button>
+              </div>
+            )}
+
+            {page === 15 && (
+              <div class="text-center flex flex-col items-center">
+                <div class="text-5xl mb-2 animate-float">💌</div>
+                <h2 class="text-xl font-bold text-blue-900 mb-4">Barakallahu fii Umrik</h2>
+                <div class="w-full bg-blue-50/70 border border-blue-200 rounded-2xl p-4 text-left max-h-56 overflow-y-auto mb-6 text-sm text-slate-700 leading-relaxed shadow-inner whitespace-pre-line">
+                  Barakallahu fii Umrik Mrs.Puff..🥳🥳
+
+                  Semoga di usia yang ini kamu selalu di limpahkan kesehatan, kebahagiaan, kemudahan dalam setiap urusan dan keberkahan hidup. Semoga apa yang di semogakan berhenti menjadi semoga... 
+
+                  Semoga rezeki nya makin lancar yaa... Kalau udh banyak uang, jangan lupa juga untuk traktir aku wkwk😋
+
+                  Pokok nya wish you all the best.. 
+                  Selamat menuaa🥳🥳🤣
+                </div>
+                <button onClick={handleReset} class="w-full bg-slate-800 hover:bg-slate-900 active:scale-95 text-white font-bold py-3 rounded-2xl shadow-md transition">Ulang Dari Awal 🔄</button>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
